@@ -1,0 +1,98 @@
+<mxfile host="app.diagrams.net" modified="2026-05-31T00:00:00.000Z" agent="Codex" version="24.7.17">
+  <diagram id="animeapp-db-schema" name="AnimeApp Database Schema">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="anime" value="Anime&#xa;PK id Int&#xa;title String&#xa;description String?&#xa;releaseYear Int?&#xa;status AnimeStatus&#xa;studioId Int? FK&#xa;createdAt DateTime&#xa;updatedAt DateTime" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;fontStyle=1;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="80" width="260" height="210" as="geometry" />
+        </mxCell>
+
+        <mxCell id="studio" value="Studio&#xa;PK id Int&#xa;name String UNIQUE&#xa;country String?&#xa;createdAt DateTime&#xa;updatedAt DateTime" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#7c3aed;fontStyle=1;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="120" y="100" width="250" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="genre" value="Genre&#xa;PK id Int&#xa;name String UNIQUE&#xa;createdAt DateTime&#xa;updatedAt DateTime" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontStyle=1;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="100" width="250" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="animeGenre" value="AnimeGenre&#xa;PK animeId Int FK&#xa;PK genreId Int FK&#xa;&#xa;Table de jonction N:M" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontStyle=1;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="850" y="340" width="260" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="season" value="Season&#xa;PK id Int&#xa;seasonNumber Int&#xa;title String?&#xa;animeId Int FK&#xa;createdAt DateTime&#xa;updatedAt DateTime" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce7f3;strokeColor=#db2777;fontStyle=1;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="230" y="360" width="250" height="170" as="geometry" />
+        </mxCell>
+
+        <mxCell id="episode" value="Episode&#xa;PK id Int&#xa;episodeNumber Int&#xa;title String&#xa;durationMin Int?&#xa;watched Boolean&#xa;animeId Int FK&#xa;seasonId Int? FK&#xa;createdAt DateTime&#xa;updatedAt DateTime" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0284c7;fontStyle=1;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="210" y="620" width="280" height="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="character" value="Character&#xa;PK id Int&#xa;name String&#xa;role String?&#xa;voiceActor String?&#xa;animeId Int FK&#xa;createdAt DateTime&#xa;updatedAt DateTime" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fae8ff;strokeColor=#c026d3;fontStyle=1;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="390" width="260" height="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="user" value="User&#xa;PK id Int&#xa;username String UNIQUE&#xa;email String UNIQUE&#xa;createdAt DateTime&#xa;updatedAt DateTime" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#dc2626;fontStyle=1;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="550" width="250" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="watchlistEntry" value="WatchlistEntry&#xa;PK id Int&#xa;status WatchStatus&#xa;progress Int&#xa;userId Int FK&#xa;animeId Int FK&#xa;createdAt DateTime&#xa;updatedAt DateTime" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfccb;strokeColor=#65a30d;fontStyle=1;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="860" y="610" width="270" height="190" as="geometry" />
+        </mxCell>
+
+        <mxCell id="review" value="Review&#xa;PK id Int&#xa;rating Int&#xa;comment String?&#xa;userId Int FK&#xa;animeId Int FK&#xa;createdAt DateTime&#xa;updatedAt DateTime" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffedd5;strokeColor=#ea580c;fontStyle=1;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="650" width="260" height="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel_studio_anime" value="1:N" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#334155;" edge="1" parent="1" source="studio" target="anime">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel_anime_animeGenre" value="1:N" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#334155;" edge="1" parent="1" source="anime" target="animeGenre">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel_genre_animeGenre" value="1:N" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#334155;" edge="1" parent="1" source="genre" target="animeGenre">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel_anime_season" value="1:N" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#334155;" edge="1" parent="1" source="anime" target="season">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel_anime_episode" value="1:N" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#334155;" edge="1" parent="1" source="anime" target="episode">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel_season_episode" value="1:N optionnel" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#334155;" edge="1" parent="1" source="season" target="episode">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel_anime_character" value="1:N" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#334155;" edge="1" parent="1" source="anime" target="character">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel_anime_review" value="1:N" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#334155;" edge="1" parent="1" source="anime" target="review">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel_user_review" value="1:N" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#334155;" edge="1" parent="1" source="user" target="review">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel_anime_watchlist" value="1:N" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#334155;" edge="1" parent="1" source="anime" target="watchlistEntry">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel_user_watchlist" value="1:N" style="endArrow=block;html=1;rounded=0;strokeWidth=2;strokeColor=#334155;" edge="1" parent="1" source="user" target="watchlistEntry">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="note" value="Enums&#xa;AnimeStatus: PLANNED, AIRING, COMPLETED, CANCELLED&#xa;WatchStatus: PLAN_TO_WATCH, WATCHING, COMPLETED, DROPPED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#64748b;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="850" width="720" height="90" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
