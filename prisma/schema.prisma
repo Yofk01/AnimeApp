@@ -1,0 +1,169 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum AnimeStatus {
+  PLANNED
+  AIRING
+  COMPLETED
+  CANCELLED
+}
+
+enum WatchStatus {
+  PLAN_TO_WATCH
+  WATCHING
+  COMPLETED
+  DROPPED
+}
+
+model Anime {
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String?
+  releaseYear Int?
+  status      AnimeStatus @default(PLANNED)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  studioId Int?
+  studio   Studio? @relation(fields: [studioId], references: [id], onDelete: SetNull)
+
+  seasons          Season[]
+  episodes         Episode[]
+  characters       Character[]
+  animeGenres      AnimeGenre[]
+  watchlistEntries WatchlistEntry[]
+  reviews          Review[]
+
+  @@index([studioId])
+}
+
+model Studio {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  country   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  animes Anime[]
+}
+
+model Genre {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  animeGenres AnimeGenre[]
+}
+
+model AnimeGenre {
+  animeId Int
+  genreId Int
+
+  anime Anime @relation(fields: [animeId], references: [id], onDelete: Cascade)
+  genre Genre @relation(fields: [genreId], references: [id], onDelete: Cascade)
+
+  @@id([animeId, genreId])
+  @@index([genreId])
+}
+
+model Season {
+  id           Int      @id @default(autoincrement())
+  seasonNumber Int
+  title        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  animeId Int
+  anime   Anime @relation(fields: [animeId], references: [id], onDelete: Cascade)
+
+  episodes Episode[]
+
+  @@unique([animeId, seasonNumber])
+  @@index([animeId])
+}
+
+model Episode {
+  id            Int      @id @default(autoincrement())
+  episodeNumber Int
+  title         String
+  durationMin   Int?
+  watched       Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  animeId Int
+  anime   Anime @relation(fields: [animeId], references: [id], onDelete: Cascade)
+
+  seasonId Int?
+  season   Season? @relation(fields: [seasonId], references: [id], onDelete: SetNull)
+
+  @@unique([animeId, episodeNumber])
+  @@index([animeId])
+  @@index([seasonId])
+}
+
+model Character {
+  id         Int      @id @default(autoincrement())
+  name       String
+  role       String?
+  voiceActor String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  animeId Int
+  anime   Anime @relation(fields: [animeId], references: [id], onDelete: Cascade)
+
+  @@index([animeId])
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  watchlistEntries WatchlistEntry[]
+  reviews          Review[]
+}
+
+model WatchlistEntry {
+  id        Int         @id @default(autoincrement())
+  status    WatchStatus @default(PLAN_TO_WATCH)
+  progress  Int         @default(0)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  animeId Int
+  anime   Anime @relation(fields: [animeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, animeId])
+  @@index([animeId])
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  animeId Int
+  anime   Anime @relation(fields: [animeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, animeId])
+  @@index([animeId])
+}
